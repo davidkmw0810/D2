@@ -1,4 +1,4 @@
-# Measure image similarity
+# NaverD2-Measure-Images
 
 ## Outline
 * Purpose
@@ -13,10 +13,10 @@
 ## Functions
 * Clustering is performed based on learning through training datasets.
 
-## Result
+## Result (in samples)
 * Accuracy in training set : 99%
 * Validation accuracy : 93%
-* 99% accuracy in our training is less than 5%set, so this is enough for practical application.
+* 99% accuracy in our training is less than 5%, so this is enough for practical application.
 
 ## Library
 
