@@ -1,7 +1,3 @@
-"""
-Your code here
-"""
-
 from config import *
 import cv2
 import glob
@@ -13,6 +9,9 @@ from sklearn.model_selection import train_test_split
 from tensorflow.keras.models import Sequential
 from tensorflow.keras.layers import Dense, Conv2D, MaxPooling2D, Dropout, Flatten
 
+"""
+Read Dataset
+"""
 abst_filename_list = [img for img in glob.glob(IMG_DIR + "/*.jpg")]
 
 filename_list = [name.split(IMG_DIR + "\\")[1] for name in abst_filename_list]
@@ -49,10 +48,10 @@ for label in labels:
 
 df["label"] = converted_id_list
 
+
 """
 Read Features
 """
-
 dataset = list()
 label_dataset = list()
 
@@ -88,10 +87,10 @@ X_train, X_test, y_train, y_test = train_test_split(
     random_state=1
 )
 
+
 """
 Making Model
 """
-
 model = Sequential()
 
 model.add(Conv2D(32, (3, 3), padding="same", activation="relu", input_shape=X_train.shape[1:]))
@@ -111,7 +110,7 @@ model.add(Dense(512, activation="relu"))
 model.add(Dropout(0.5))
 model.add(Dense(num_classes, activation="softmax"))
 
-# Print Sumamry
+# Print Summary
 model.summary()
 
 # Hyper Params
@@ -136,11 +135,20 @@ history = model.fit(
 print("Accuracy : %.2f" % history.history["acc"][-1])
 print("Valid Accuracy : %.2f" % history.history["val_acc"][-1])
 
+# Saving Model and Weights
+model_json = model.to_json()
+with open(DATA_DIR + "/d2_model.json", "w") as json_file:
+    json_file.write(model_json)
+
+model.save_weights(DATA_DIR + "/d2_weights.h5")
+
+
 """
 Predict Label
 """
 y_pred = model.predict(reshaped_dataset)
 y_pred_label = np.argmax(y_pred, axis=1)
+
 
 """
 Saving Label to .txt
@@ -151,3 +159,8 @@ for label in y_pred_label:
     label_input = str(label)
     f.write(label_input + "\n")
 f.close()
+
+# Writing to .csv (with clustering)
+csv_dict = {"file_name": df["file_name"], "labels_pred": y_pred_label}
+df_csv = pd.DataFrame(data=csv_dict)
+df_csv.to_csv(DATA_DIR + "/pred_db.csv")
