@@ -16,7 +16,7 @@
 ## Result (in samples)
 * Accuracy in training set : 99%
 * Validation accuracy : 93%
-* 99% accuracy in our training is less than 5%, so this is enough for practical application.
+* Error in our training is less than 5%, so this is enough for practical application.
 
 ## Library
 
